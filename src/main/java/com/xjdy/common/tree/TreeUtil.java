@@ -64,20 +64,25 @@ public class TreeUtil {
             return Lists.newArrayList();
         }
 
-        source = source.stream().filter(Objects::nonNull).filter(item -> currentCodeFunction.apply(item) != null).collect(Collectors.toList());
+        List<T> filterList = Lists.newArrayList();
 
         Map<R,T> searchMap = new HashMap<>();
         Map<R,T> allMap = new HashMap<>();
 
-        source.forEach(item ->{
+        source.stream().filter(Objects::nonNull).filter(item -> currentCodeFunction.apply(item) != null).map(item -> {
+
             R childCode = currentCodeFunction.apply(item);
             searchMap.put(childCode,item);
             allMap.put(childCode,item);
-        });
+
+            if(searchFunction.apply(item)){
+                filterList.add(item);
+            }
+
+            return item;
+        }).collect(Collectors.toList());
 
         List<T> allFilterData = Lists.newArrayList();
-
-        List<T> filterList = source.stream().filter(searchFunction::apply).collect(Collectors.toList());
 
         filterList.forEach(item -> {
 

@@ -37,9 +37,7 @@ public class TreeUtil {
             return Lists.newArrayList();
         }
 
-        source = source.stream().filter(Objects::nonNull).filter(item -> childCodeFunction.apply(item) != null).collect(Collectors.toList());
-
-        Map<R,T> childCodeMap = source.stream().collect(Collectors.toMap(childCodeFunction, (p) -> p));
+        Map<R,T> childCodeMap = source.stream().filter(Objects::nonNull).filter(item -> childCodeFunction.apply(item) != null).collect(Collectors.toMap(childCodeFunction, (p) -> p));
 
         return convertToResult(childCodeMap,source,parentCodeFunction,getChildsFunction);
     }

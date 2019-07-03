@@ -24,20 +24,20 @@ public class TreeUtil {
      *      2：childs属性不能为null，必须要之前初始化好
      *
      * @param source
-     * @param childCodeFunction
+     * @param currentCodeFunction
      * @param parentCodeFunction
      * @param getChildsFunction
      * @param <T>
      * @param <R>
      * @return
      */
-    public static <T,R> List<T> convertToTree(List<T> source, Function<T,R> childCodeFunction, Function<T,R> parentCodeFunction,Function<T,List<T>> getChildsFunction){
+    public static <T,R> List<T> convertToTree(List<T> source, Function<T,R> currentCodeFunction, Function<T,R> parentCodeFunction,Function<T,List<T>> getChildsFunction){
 
         if(CollectionUtils.isEmpty(source)){
             return Lists.newArrayList();
         }
 
-        Map<R,T> childCodeMap = source.stream().filter(Objects::nonNull).filter(item -> childCodeFunction.apply(item) != null).collect(Collectors.toMap(childCodeFunction, (p) -> p));
+        Map<R,T> childCodeMap = source.stream().filter(Objects::nonNull).filter(item -> currentCodeFunction.apply(item) != null).collect(Collectors.toMap(currentCodeFunction, (p) -> p));
 
         return convertToResult(childCodeMap,source,parentCodeFunction,getChildsFunction);
     }
@@ -50,7 +50,7 @@ public class TreeUtil {
      *       2：childs属性不能为null，必须要之前初始化好
      *
      * @param source
-     * @param childCodeFunction
+     * @param currentCodeFunction
      * @param parentCodeFunction
      * @param getChildsFunction
      * @param searchFunction
@@ -58,19 +58,19 @@ public class TreeUtil {
      * @param <R>
      * @return
      */
-    public static <T,R> List<T> convertToTreeCanFilter(List<T> source, Function<T,R> childCodeFunction, Function<T,R> parentCodeFunction,Function<T,List<T>> getChildsFunction,Function<T,Boolean> searchFunction){
+    public static <T,R> List<T> convertToTreeCanFilter(List<T> source, Function<T,R> currentCodeFunction, Function<T,R> parentCodeFunction,Function<T,List<T>> getChildsFunction,Function<T,Boolean> searchFunction){
 
         if(CollectionUtils.isEmpty(source)){
             return Lists.newArrayList();
         }
 
-        source = source.stream().filter(Objects::nonNull).filter(item -> childCodeFunction.apply(item) != null).collect(Collectors.toList());
+        source = source.stream().filter(Objects::nonNull).filter(item -> currentCodeFunction.apply(item) != null).collect(Collectors.toList());
 
         Map<R,T> searchMap = new HashMap<>();
         Map<R,T> allMap = new HashMap<>();
 
         source.forEach(item ->{
-            R childCode = childCodeFunction.apply(item);
+            R childCode = currentCodeFunction.apply(item);
             searchMap.put(childCode,item);
             allMap.put(childCode,item);
         });
@@ -85,7 +85,7 @@ public class TreeUtil {
 
             do{
                 allFilterData.add(parentObj);
-                searchMap.remove(childCodeFunction.apply(parentObj));
+                searchMap.remove(currentCodeFunction.apply(parentObj));
 
                 parentObj = searchMap.get(parentCodeFunction.apply(parentObj));
 

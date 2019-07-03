@@ -7,6 +7,7 @@ import lombok.ToString;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.xjdy.common.tree.TreeUtil.convertToTree;
 import static com.xjdy.common.tree.TreeUtil.convertToTreeCanFilter;
 
 /**
@@ -16,6 +17,11 @@ import static com.xjdy.common.tree.TreeUtil.convertToTreeCanFilter;
 public class CommonTree {
 
     public static void main(String[] args) {
+        testTree();
+        testTreeWithFilter();
+    }
+
+    private static void testTree(){
         List<Tree> trees = new ArrayList<Tree>(){{
             add(new Tree("1",null,"jim",new ArrayList<>()));
             add(new Tree("2","1","tom",new ArrayList<>()));
@@ -23,8 +29,19 @@ public class CommonTree {
             add(new Tree("4","2","hello",new ArrayList<>()));
             add(new Tree(null,"1","hello",new ArrayList<>()));
         }};
+        List<Tree> treeAndFilterList = convertToTreeCanFilter(trees,Tree::getCode,Tree::getParentCode,Tree::getChild,(Tree tree) -> tree.getName().equals("hello"));
+        System.out.println(treeAndFilterList);
+    }
 
-        List<Tree> treeList = convertToTreeCanFilter(trees,Tree::getCode,Tree::getParentCode,Tree::getChild,(Tree tree) -> tree.getName().equals("hello"));
+    private static void testTreeWithFilter(){
+        List<Tree> trees = new ArrayList<Tree>(){{
+            add(new Tree("1",null,"jim",new ArrayList<>()));
+            add(new Tree("2","1","tom",new ArrayList<>()));
+            add(new Tree("3",null,"jack",new ArrayList<>()));
+            add(new Tree("4","2","hello",new ArrayList<>()));
+            add(new Tree(null,"1","hello",new ArrayList<>()));
+        }};
+        List<Tree> treeList = convertToTree(trees,Tree::getCode,Tree::getParentCode,Tree::getChild);
         System.out.println(treeList);
     }
 

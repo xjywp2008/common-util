@@ -21,7 +21,7 @@ public class CommonTree {
         testTreeWithFilter();
     }
 
-    private static void testTree(){
+    private static void testTreeWithFilter(){
         List<Tree> trees = new ArrayList<Tree>(){{
             add(new Tree("1",null,"jim",new ArrayList<>()));
             add(new Tree("2","1","tom",new ArrayList<>()));
@@ -33,7 +33,7 @@ public class CommonTree {
         System.out.println(treeAndFilterList);
     }
 
-    private static void testTreeWithFilter(){
+    private static void testTree(){
         List<Tree> trees = new ArrayList<Tree>(){{
             add(new Tree("1",null,"jim",new ArrayList<>()));
             add(new Tree("2","1","tom",new ArrayList<>()));
